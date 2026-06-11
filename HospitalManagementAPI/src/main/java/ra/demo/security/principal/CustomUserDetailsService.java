@@ -1,0 +1,19 @@
+package ra.demo.security.principal;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import ra.demo.repository.UserRepository;
+
+@Service
+@RequiredArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
+    private final UserRepository userRepository;
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return new CustomUserDetails(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")));
+    }
+}
