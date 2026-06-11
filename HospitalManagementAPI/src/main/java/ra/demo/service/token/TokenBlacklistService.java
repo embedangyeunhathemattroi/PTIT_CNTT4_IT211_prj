@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class TokenBlacklistService {
 
     public void blacklist(String token, LocalDateTime expiredAt) {
-        // Redis disabled
+
     }
 
     public boolean isBlacklisted(String token) {
