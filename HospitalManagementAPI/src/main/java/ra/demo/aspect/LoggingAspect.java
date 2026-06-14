@@ -2,7 +2,6 @@ package ra.demo.aspect;
 
 // Lombok tự tạo biến log để ghi log
 import lombok.extern.slf4j.Slf4j;
-
 // Chứa thông tin về method đang được gọi
 import org.aspectj.lang.JoinPoint;
 

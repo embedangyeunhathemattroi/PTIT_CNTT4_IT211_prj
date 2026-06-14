@@ -1,54 +1,51 @@
 package ra.demo.security.principal;
 
-// Interface biểu diễn quyền
 import org.springframework.security.core.GrantedAuthority;
-// Tạo role cho user
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-// Interface chuẩn của Spring Security
 import org.springframework.security.core.userdetails.UserDetails;
-// Entity User
 import ra.demo.model.entity.User;
 
 import java.util.Collection;
 import java.util.List;
 
-// Custom UserDetails chứa thông tin user đăng nhập
 public record CustomUserDetails(User user) implements UserDetails {
 
- // Trả về danh sách quyền của user
- public Collection<? extends GrantedAuthority> getAuthorities() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(
+                new SimpleGrantedAuthority(
+                        "ROLE_" + user.getRole().name()
+                )
+        );
+    }
 
-  // Tạo ROLE_ADMIN hoặc ROLE_USER
-  return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
- }
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
 
- // Lấy password của user
- public String getPassword() {
-  return user.getPassword();
- }
+    @Override
+    public String getUsername() {
+        return user.getUsername();
+    }
 
- // Lấy username của user
- public String getUsername() {
-  return user.getUsername();
- }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
- // Kiểm tra tài khoản còn hiệu lực
- public boolean isAccountNonExpired() {
-  return true;
- }
+    @Override
+    public boolean isAccountNonLocked() {
+        return user.isActive();
+    }
 
- // Kiểm tra tài khoản có bị khóa không
- public boolean isAccountNonLocked() {
-  return user.isActive();
- }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
- // Kiểm tra mật khẩu còn hiệu lực
- public boolean isCredentialsNonExpired() {
-  return true;
- }
-
- // Kiểm tra tài khoản đã kích hoạt chưa
- public boolean isEnabled() {
-  return user.isActive();
- }
+    @Override
+    public boolean isEnabled() {
+        return user.isActive();
+    }
 }
